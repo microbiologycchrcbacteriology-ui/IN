@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#04241c" />
+<title>Microbiology Department · Advanced Quick Launch</title>
+<link rel="icon" href="favicon.ico" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..800&display=swap" rel="stylesheet" />
+
+<!-- Theme boot (prevents flash) -->
+<script>
+  if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+  }
+</script>
+
+<style>
+/* ══════════════════════════════════════════════════════════════
+   DESIGN TOKENS
+   ══════════════════════════════════════════════════════════════ */
+:root{
+  --font:'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --bg:#eef3f7;
+  --glass-bg:rgba(238,243,247,.82);
+  --card-bg:rgba(255,255,255,.86);
+  --card-bg-hover:#ffffff;
+  --border:rgba(8,19,28,.08);
+  --border-strong:rgba(8,19,28,.16);
+  --text:#08131c;
+  --muted:#5a7285;
+  --faint:#8ea3b3;
+  --accent:#059669;
+  --accent-2:#0d9488;
+  --accent-soft:rgba(5,150,105,.10);
+  --shadow-sm:0 1px 2px rgba(8,19,28,.05), 0 2px 6px rgba(8,19,28,.04);
+  --shadow-md:0 14px 34px -16px rgba(8,19,28,.28);
+  --shadow-accent:0 18px 40px -18px rgba(5,150,105,.55);
+  --header-from:#04372b;
+  --header-to:#01120d;
+  --hair:rgba(255,255,255,.10);
+}
+html.dark{
+  --bg:#050a12;
+  --glass-bg:rgba(5,10,18,.78);
+  --card-bg:rgba(15,23,42,.72);
+  --card-bg-hover:rgba(19,30,52,.92);
+  --border:rgba(148,163,184,.13);
+  --border-strong:rgba(148,163,184,.26);
+  --text:#e9f2f8;
+  --muted:#8ea4b7;
+  --faint:#64798b;
+  --accent:#34d399;
+  --accent-2:#2dd4bf;
+  --accent-soft:rgba(52,211,153,.12);
+  --shadow-sm:0 1px 2px rgba(0,0,0,.5);
+  --shadow-md:0 18px 40px -18px rgba(0,0,0,.85);
+  --shadow-accent:0 18px 44px -18px rgba(16,185,129,.5);
+  --header-from:#04241c;
+  --header-to:#010a08;
+  --hair:rgba(255,255,255,.07);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BASE
+   ══════════════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%;margin:0;padding:0}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text);
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  transition:background .45s ease, color .45s ease;
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input{font:inherit;color:inherit}
+[hidden]{display:none !important}
+::selection{background:var(--accent);color:#fff}
+
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{
+  background:var(--border-strong);
+  border-radius:99px;
+  border:3px solid transparent;
+  background-clip:content-box;
+}
+::-webkit-scrollbar-thumb:hover{background:var(--accent);background-clip:content-box}
+
+/* ══════════════════════════════════════════════════════════════
+   ANIMATED BACKGROUND
+   ══════════════════════════════════════════════════════════════ */
+.bg-layer{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.bg-layer::before{
+  content:'';position:absolute;inset:-22%;
+  background:
+    radial-gradient(46rem 46rem at 10% 6%, rgba(16,185,129,.13), transparent 62%),
+    radial-gradient(42rem 42rem at 92% 94%, rgba(56,189,248,.11), transparent 60%),
+    radial-gradient(34rem 34rem at 82% 4%, rgba(124,58,237,.09), transparent 62%);
+  animation:drift 26s ease-in-out infinite alternate;
+}
+html.dark .bg-layer::before{opacity:.85}
+@keyframes drift{
+  from{transform:translate3d(-2%,-1.5%,0) scale(1)}
+  to{transform:translate3d(2%,2%,0) scale(1.07)}
+}
+.bg-layer .mesh{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size:46px 46px;
+  -webkit-mask-image:radial-gradient(circle at 50% 38%, #000 0%, transparent 76%);
+  mask-image:radial-gradient(circle at 50% 38%, #000 0%, transparent 76%);
+  opacity:.7;
+}
+#particles{position:absolute;inset:0;display:block}
+
+/* ══════════════════════════════════════════════════════════════
+   APP SHELL
+   ══════════════════════════════════════════════════════════════ */
+#app{
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;
+  height:100vh;height:100dvh;width:100%;
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+.topbar{
+  flex:0 0 auto;
+  position:relative;z-index:20;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:.75rem;flex-wrap:wrap;
+  padding:.62rem clamp(.9rem,2.6vw,1.7rem);
+  background:linear-gradient(120deg,var(--header-from) 0%, var(--header-to) 100%);
+  color:#fff;
+  border-bottom:1px solid var(--hair);
+  box-shadow:0 10px 34px -16px rgba(0,0,0,.75);
+}
+.topbar::after{
+  content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;
+  background:linear-gradient(90deg,transparent,#34d399 25%,#22d3ee 50%,#34d399 75%,transparent);
+  opacity:.75;
+}
+.brand{display:flex;align-items:center;gap:.7rem;min-width:0}
+.logo{
+  width:44px;height:44px;flex:0 0 44px;
+  display:grid;place-items:center;
+  border-radius:14px;
+  background:radial-gradient(circle at 30% 25%, rgba(110,231,183,.22), rgba(34,211,238,.06) 70%);
+  border:1px solid rgba(110,231,183,.28);
+  box-shadow:0 0 0 1px rgba(0,0,0,.15) inset, 0 8px 22px -10px rgba(16,185,129,.8);
+}
+.logo svg{width:32px;height:32px;display:block}
+.logo .spin{transform-box:fill-box;transform-origin:center;animation:spin 22s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.brand-text{min-width:0}
+.brand-text h1{
+  margin:0;font-size:clamp(.95rem,2.1vw,1.18rem);
+  font-weight:700;letter-spacing:-.022em;line-height:1.15;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.brand-text p{
+  margin:.1rem 0 0;font-size:.6rem;font-weight:600;
+  letter-spacing:.09em;text-transform:uppercase;
+  color:#6ee7b7;opacity:.85;
+}
+
+.topbar-right{display:flex;align-items:center;gap:.5rem;margin-left:auto}
+
+.hclock{
+  display:flex;flex-direction:column;align-items:flex-end;line-height:1.15;
+  padding:.28rem .7rem;border-radius:11px;
+  background:rgba(255,255,255,.07);
+  border:1px solid var(--hair);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+}
+.hclock-time{
+  font-size:.86rem;font-weight:700;letter-spacing:.04em;
+  font-variant-numeric:tabular-nums;
+  color:#d1fae5;
+}
+.hclock-date{font-size:.55rem;font-weight:500;color:#6ee7b7;opacity:.8;letter-spacing:.03em}
+
+.status-pill{
+  display:inline-flex;align-items:center;gap:.4rem;
+  padding:.34rem .68rem;border-radius:99px;
+  font-size:.6rem;font-weight:600;letter-spacing:.03em;
+  background:rgba(255,255,255,.07);
+  border:1px solid var(--hair);
+  color:#a7f3d0;
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  white-space:nowrap;
+}
+.status-pill .dot{
+  width:7px;height:7px;border-radius:50%;background:#22c55e;
+  box-shadow:0 0 0 3px rgba(34,197,94,.18);
+  animation:pulse-dot 2.2s ease-in-out infinite;
+}
+.status-pill .dot.busy{background:#fbbf24;box-shadow:0 0 0 3px rgba(251,191,36,.2)}
+.status-pill .dot.idle{background:#94a3b8;box-shadow:none;animation:none}
+@keyframes pulse-dot{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.45;transform:scale(.78)}
+}
+
+.icon-btn{
+  width:38px;height:38px;flex:0 0 38px;
+  display:grid;place-items:center;
+  border-radius:12px;font-size:1rem;
+  background:rgba(255,255,255,.08);
+  border:1px solid var(--hair);
+  color:#fff;
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  transition:background .2s, transform .18s, box-shadow .2s;
+}
+.icon-btn:hover{background:rgba(255,255,255,.18);transform:translateY(-1px)}
+.icon-btn:active{transform:scale(.93)}
+
+/* ── Scroll region ──────────────────────────────────────────── */
+#main{
+  flex:1 1 auto;min-height:0;
+  overflow-y:auto;overflow-x:hidden;
+  padding:clamp(.9rem,2.4vw,1.5rem) clamp(.85rem,3vw,2rem) 6rem;
+  scroll-behavior:smooth;
+}
+
+/* ── Hero ───────────────────────────────────────────────────── */
+.hero{
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1.2rem;flex-wrap:wrap;
+  padding:clamp(1rem,2.6vw,1.6rem) clamp(1rem,2.8vw,1.8rem);
+  border-radius:20px;
+  background:
+    linear-gradient(135deg, rgba(5,150,105,.10), rgba(13,148,136,.05) 45%, rgba(56,189,248,.07)),
+    var(--card-bg);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow-sm);
+}
+html.dark .hero{
+  background:
+    linear-gradient(135deg, rgba(16,185,129,.14), rgba(13,148,136,.05) 45%, rgba(56,189,248,.07)),
+    var(--card-bg);
+}
+.hero::before{
+  content:'';position:absolute;right:-70px;top:-90px;
+  width:260px;height:260px;border-radius:50%;
+  background:radial-gradient(circle, rgba(16,185,129,.20), transparent 68%);
+  pointer-events:none;
+}
+.hero::after{
+  content:'';position:absolute;left:-60px;bottom:-120px;
+  width:240px;height:240px;border-radius:50%;
+  background:radial-gradient(circle, rgba(56,189,248,.16), transparent 68%);
+  pointer-events:none;
+}
+.hero-copy{position:relative;z-index:1;min-width:min(100%,320px);flex:1 1 340px}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:.42rem;
+  padding:.26rem .62rem;border-radius:99px;
+  font-size:.56rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);
+  background:var(--accent-soft);
+  border:1px solid rgba(5,150,105,.2);
+}
+.eyebrow .pulse{
+  width:6px;height:6px;border-radius:50%;background:var(--accent);
+  animation:pulse-dot 1.8s ease-in-out infinite;
+}
+.hero h2{
+  margin:.6rem 0 .3rem;
+  font-size:clamp(1.02rem,2.5vw,1.42rem);
+  font-weight:750;letter-spacing:-.028em;line-height:1.2;
+}
+.hero p{
+  margin:0;max-width:56ch;
+  font-size:clamp(.72rem,1.6vw,.82rem);
+  line-height:1.55;color:var(--muted);
+}
+.hero-stats{position:relative;z-index:1;display:flex;gap:.55rem;flex-wrap:wrap}
+.stat{
+  min-width:88px;
+  padding:.55rem .85rem;border-radius:14px;
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow-sm);
+  display:flex;flex-direction:column;gap:.08rem;
+}
+.stat b{
+  font-size:1.12rem;font-weight:750;letter-spacing:-.02em;
+  color:var(--accent);font-variant-numeric:tabular-nums;
+}
+.stat span{
+  font-size:.53rem;font-weight:700;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--faint);
+}
+
+/* ── Toolbar ────────────────────────────────────────────────── */
+.toolbar{
+  position:sticky;top:0;z-index:8;
+  display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;
+  margin:1rem calc(-1 * clamp(.85rem,3vw,2rem)) .3rem;
+  padding:.7rem clamp(.85rem,3vw,2rem);
+  background:var(--glass-bg);
+  backdrop-filter:blur(16px) saturate(170%);
+  -webkit-backdrop-filter:blur(16px) saturate(170%);
+  border-bottom:1px solid var(--border);
+}
+.search{
+  display:flex;align-items:center;gap:.5rem;
+  flex:1 1 220px;max-width:360px;
+  padding:.5rem .8rem;
+  border-radius:13px;
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow-sm);
+  transition:border-color .2s, box-shadow .2s, background .2s;
+}
+.search:focus-within{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-soft);
+}
+.search svg{width:15px;height:15px;flex:0 0 15px;color:var(--faint)}
+.search input{
+  flex:1 1 auto;min-width:0;
+  border:0;outline:0;background:transparent;
+  font-size:.78rem;font-weight:500;
+}
+.search input::placeholder{color:var(--faint)}
+.search kbd{
+  font-family:var(--font);font-size:.58rem;font-weight:700;
+  padding:.14rem .38rem;border-radius:6px;
+  color:var(--faint);background:var(--accent-soft);
+  border:1px solid var(--border);
+}
+.search input::-webkit-search-cancel-button{-webkit-appearance:none}
+
+.chips{display:flex;gap:.35rem;overflow-x:auto;padding-bottom:2px;flex:1 1 auto;min-width:0}
+.chips::-webkit-scrollbar{height:0}
+.chip{
+  flex:0 0 auto;
+  padding:.4rem .78rem;border-radius:99px;
+  font-size:.66rem;font-weight:650;letter-spacing:.01em;
+  color:var(--muted);
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  white-space:nowrap;
+  transition:all .2s ease;
+}
+.chip:hover{color:var(--accent);border-color:var(--accent);transform:translateY(-1px)}
+.chip.active{
+  color:#fff;
+  background:linear-gradient(135deg,#059669,#0d9488);
+  border-color:transparent;
+  box-shadow:0 8px 18px -8px rgba(5,150,105,.8);
+}
+
+/* ── Grid & Cards ───────────────────────────────────────────── */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(min(100%, 246px), 1fr));
+  gap:.7rem;
+  margin-top:.85rem;
+}
+.app-card{
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;gap:.8rem;
+  padding:.82rem .9rem;
+  border-radius:16px;
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow-sm);
+  text-align:left;
+  transition:transform .3s cubic-bezier(.2,.8,.3,1.15),
+             box-shadow .3s ease,
+             border-color .3s ease,
+             background .3s ease;
+  animation:cardIn .5s cubic-bezier(.2,.8,.3,1) backwards;
+}
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(14px) scale(.97)}
+  to{opacity:1;transform:none}
+}
+.app-card::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(112deg, transparent 32%, rgba(255,255,255,.42) 50%, transparent 68%);
+  transform:translateX(-130%);
+  transition:transform .75s ease;
+}
+html.dark .app-card::after{
+  background:linear-gradient(112deg, transparent 32%, rgba(255,255,255,.10) 50%, transparent 68%);
+}
+.app-card:hover::after{transform:translateX(130%)}
+.app-card:hover{
+  transform:translateY(-4px);
+  background:var(--card-bg-hover);
+  border-color:rgba(5,150,105,.45);
+  box-shadow:var(--shadow-md), var(--shadow-accent);
+}
+.app-card:active{transform:translateY(-1px) scale(.985)}
+.app-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.app-card.launching{pointer-events:none;opacity:.75;transform:scale(.98)}
+
+.app-icon{
+  width:46px;height:46px;flex:0 0 46px;
+  display:grid;place-items:center;
+  border-radius:14px;
+  font-size:1.22rem;line-height:1;
+  background-image:linear-gradient(135deg, var(--c1,#94a3b8), var(--c2,#475569));
+  box-shadow:0 10px 20px -10px var(--c2,#475569), inset 0 1px 0 rgba(255,255,255,.28);
+  transition:transform .3s cubic-bezier(.2,.8,.3,1.4);
+}
+.app-card:hover .app-icon{transform:scale(1.08) rotate(-4deg)}
+
+.app-text{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:.16rem}
+.app-label{
+  font-size:.79rem;font-weight:680;letter-spacing:-.012em;
+  color:var(--text);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  transition:color .2s;
+}
+.app-card:hover .app-label{color:var(--accent)}
+.app-desc{
+  font-size:.63rem;font-weight:500;color:var(--muted);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.app-arrow{
+  width:16px;height:16px;flex:0 0 16px;
+  color:var(--faint);
+  opacity:.55;
+  transition:transform .3s cubic-bezier(.2,.8,.3,1.4), opacity .25s, color .25s;
+}
+.app-card:hover .app-arrow{
+  opacity:1;color:var(--accent);
+  transform:translate(3px,-3px);
+}
+
+/* ── Empty state ────────────────────────────────────────────── */
+.empty{
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  gap:.3rem;padding:3.4rem 1rem;text-align::center;text-align:center;
+}
+.empty.show{display:flex}
+.empty-icon{font-size:2.6rem;filter:grayscale(.35);opacity:.7}
+.empty h3{margin:0;font-size:.92rem;font-weight:700}
+.empty p{margin:0;font-size:.75rem;color:var(--muted);max-width:38ch}
+
+/* ── Footer ─────────────────────────────────────────────────── */
+.footer{
+  flex:0 0 auto;
+  display:flex;align-items:center;justify-content:center;gap:.5rem;flex-wrap:wrap;
+  padding:.42rem clamp(.8rem,3vw,1.5rem);
+  font-size:.56rem;font-weight:500;letter-spacing:.02em;
+  color:var(--faint);
+  background:var(--glass-bg);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-top:1px solid var(--border);
+}
+.footer .sep{opacity:.45}
+
+/* ── Floating analog clock ──────────────────────────────────── */
+.clock-widget{
+  position:fixed;z-index:999;pointer-events:none;
+  right:22px;bottom:88px;
+  width:112px;height:112px;padding:9px;
+  border-radius:50%;
+  display:grid;place-items:center;
+  background:radial-gradient(circle at 32% 26%, rgba(255,255,255,.85), rgba(255,255,255,.62));
+  backdrop-filter:blur(18px) saturate(180%);
+  -webkit-backdrop-filter:blur(18px) saturate(180%);
+  border:1px solid rgba(255,255,255,.55);
+  box-shadow:
+    0 22px 44px -18px rgba(8,19,28,.42),
+    0 0 0 1px rgba(5,150,105,.10),
+    0 0 0 6px rgba(5,150,105,.05);
+  transition:background .4s, box-shadow .4s, border-color .4s;
+}
+html.dark .clock-widget{
+  background:radial-gradient(circle at 32% 26%, rgba(30,41,59,.9), rgba(9,16,28,.82));
+  border-color:rgba(148,163,184,.14);
+  box-shadow:
+    0 22px 50px -18px rgba(0,0,0,.9),
+    0 0 0 1px rgba(52,211,153,.14),
+    0 0 0 7px rgba(52,211,153,.05);
+}
+#clock-canvas{width:100%;height:100%;display:block;border-radius:50%}
+
+/* ══════════════════════════════════════════════════════════════
+   ICON COLOUR SYSTEM
+   ══════════════════════════════════════════════════════════════ */
+.c-blue  {--c1:#60a5fa;--c2:#2563eb}
+.c-emerald{--c1:#34d399;--c2:#059669}
+.c-purple{--c1:#a78bfa;--c2:#7c3aed}
+.c-red   {--c1:#f87171;--c2:#dc2626}
+.c-sky   {--c1:#38bdf8;--c2:#0284c7}
+.c-yellow{--c1:#fbbf24;--c2:#d97706}
+.c-green {--c1:#4ade80;--c2:#16a34a}
+.c-teal  {--c1:#2dd4bf;--c2:#0d9488}
+.c-orange{--c1:#fb923c;--c2:#ea580c}
+.c-indigo{--c1:#818cf8;--c2:#4f46e5}
+.c-pink  {--c1:#f472b6;--c2:#db2777}
+.c-lime  {--c1:#a3e635;--c2:#65a30d}
+.c-cyan  {--c1:#22d3ee;--c2:#0891b2}
+.c-amber {--c1:#fbbf24;--c2:#d97706}
+.c-gray  {--c1:#9ca3af;--c2:#4b5563}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════════ */
+@media (max-width:860px){
+  .hclock-date{display:none}
+}
+@media (max-width:640px){
+  .topbar{padding:.5rem .8rem;gap:.5rem}
+  .logo{width:38px;height:38px;flex-basis:38px;border-radius:12px}
+  .logo svg{width:27px;height:27px}
+  .brand-text p{font-size:.52rem;letter-spacing:.07em}
+  .status-pill{padding:.28rem .55rem;font-size:.55rem}
+  .icon-btn{width:34px;height:34px;flex-basis:34px;border-radius:11px}
+  .hclock{padding:.24rem .55rem}
+  .hclock-time{font-size:.74rem}
+  .hero-stats{gap:.4rem;width:100%}
+  .stat{flex:1 1 0;min-width:0;padding:.45rem .6rem;border-radius:12px}
+  .stat b{font-size:.94rem}
+  .stat span{font-size:.46rem;letter-spacing:.06em}
+  .grid{grid-template-columns:repeat(auto-fill, minmax(min(100%,180px),1fr));gap:.55rem}
+  .app-icon{width:40px;height:40px;flex-basis:40px;font-size:1.05rem;border-radius:12px}
+  .app-label{font-size:.72rem}
+  .app-desc{font-size:.58rem}
+  .clock-widget{width:82px;height:82px;right:10px;bottom:66px;padding:7px}
+  #main{padding-bottom:5.4rem}
+}
+@media (max-width:400px){
+  .app-desc{display:none}
+  .search kbd{display:none}
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ══════════ ANIMATED BACKGROUND ══════════ -->
+<div class="bg-layer" aria-hidden="true">
+  <div class="mesh"></div>
+  <canvas id="particles"></canvas>
+</div>
+
+<div id="app">
+
+  <!-- ══════════ HEADER ══════════ -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <defs>
+            <linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#6ee7b7"/>
+              <stop offset="1" stop-color="#22d3ee"/>
+            </linearGradient>
+          </defs>
+          <circle cx="32" cy="32" r="27" fill="none" stroke="url(#lg1)" stroke-width="2.6" opacity=".9"/>
+          <circle class="spin" cx="32" cy="32" r="21.5" fill="none" stroke="url(#lg1)"
+                  stroke-width="1.4" stroke-dasharray="4 7.5" opacity=".8"/>
+          <circle cx="32" cy="32" r="15" fill="rgba(110,231,183,.10)" stroke="url(#lg1)"
+                  stroke-width="1.2" opacity=".65"/>
+          <circle cx="26.5" cy="27" r="3.3" fill="#6ee7b7" opacity=".95"/>
+          <circle cx="37.5" cy="30.5" r="2.4" fill="#22d3ee" opacity=".9"/>
+          <circle cx="30" cy="37.5" r="2.9" fill="#a7f3d0" opacity=".85"/>
+          <circle cx="38.5" cy="38.5" r="1.7" fill="#6ee7b7" opacity=".7"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1>Microbiology Department</h1>
+        <p>Advanced Quick Launch Portal</p>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <div class="hclock">
+        <span class="hclock-time" id="hclock-time">--:--:--</span>
+        <span class="hclock-date" id="hclock-date">Loading…</span>
+      </div>
+
+      <div class="status-pill">
+        <span class="dot idle" id="status-dot"></span>
+        <span id="conn-status">Ready</span>
+      </div>
+
+      <button class="icon-btn" id="theme-btn" aria-label="Toggle dark mode" title="Toggle theme">
+        <span id="theme-icon">🌙</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ══════════ MAIN ══════════ -->
+  <main id="main">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow"><span class="pulse"></span> Laboratory Systems Online</span>
+        <h2>Microbiology Quick Launch Console</h2>
+        <p>Launch laboratory information systems, research databases, bioinformatics tools and
+           collaboration platforms from one unified, secure dashboard.</p>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b id="stat-active">0</b><span>Active Links</span></div>
+        <div class="stat"><b id="stat-groups">0</b><span>Categories</span></div>
+        <div class="stat"><b id="stat-clock">—</b><span>Local Time</span></div>
+      </div>
+    </section>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <label class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/>
+        </svg>
+        <input id="search" type="search" placeholder="Search resources…" autocomplete="off" spellcheck="false" />
+        <kbd>/</kbd>
+      </label>
+      <div class="chips" id="chips"></div>
+    </div>
+
+    <!-- Cards -->
+    <div class="grid" id="grid"></div>
+
+    <!-- Empty -->
+    <div class="empty" id="empty">
+      <div class="empty-icon">🔬</div>
+      <h3>No resources found</h3>
+      <p>Try a different search term or category — or add a URL to the <b>BUTTONS</b> list in the script.</p>
+    </div>
+
+  </main>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer class="footer">
+    <span>Microbiology Department</span>
+    <span class="sep">•</span>
+    <span>Thank you for visiting our website. We sincerely appreciate your interest and welcome the opportunity to serve you.</span>
+  </footer>
+
+</div>
+
+<!-- ══════════ FLOATING ANALOG CLOCK ══════════ -->
+<div class="clock-widget" aria-hidden="true">
+  <canvas id="clock-canvas"></canvas>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     ✏️  EDIT YOUR BUTTONS & URL CONNECTIONS HERE
+     ─────────────────────────────────────────────────────────────────
+     • url: ""             →  button is AUTO-HIDDEN
+     • url: "https://…"    →  button SHOWS & opens in this tab on click
+     • cat:  category name →  creates a filter chip automatically
+     • desc: short hint    →  shown under the title
+     ════════════════════════════════════════════════════════════════ -->
+<script>
+/* ── 🔗 URL CONNECTIONS ─────────────────────────────────────── */
+const BUTTONS = [
+  { id: 1,  label: "MicroLab Inventory", icon: "🌏", color: "blue",    cat: "Laboratory",
+    desc: "Reagents, media & stock control",
+    url: "https://script.google.com/macros/s/AKfycby5aa86hdeg1qcH5wZFiXL9oCLzUk1HE20Q_y658ZjQYaf0RuSFSWxoD7I1lO2iN8RA/exec" },
+
+  { id: 2,  label: "Micro LIS 2026",     icon: "🌏", color: "emerald", cat: "LIS Portal",
+    desc: "Current laboratory information system",
+    url: "https://script.google.com/macros/s/AKfycbxTi3ARobLqiWpQSnW64GL9_HPBB5lQcOBDLzaSO2xShVAHia5pVqrWj6xuWEOPfshCCQ/exec" },
+
+  { id: 3,  label: "Micro LIS 2025",     icon: "🌏", color: "purple",  cat: "LIS Portal",
+    desc: "Archive · 2025 cycle",
+    url: "https://script.google.com/macros/s/AKfycbwKuwTAB-w48UcO-9FRviFD-dkfn8ujtZgAC6Ey6AVNc5bGUAn2tiPOk_dQ4BpURUlr/exec" },
+
+  { id: 4,  label: "Micro LIS 2024",     icon: "🌏", color: "red",     cat: "LIS Portal",
+    desc: "Archive · 2024 cycle",
+    url: "https://script.google.com/macros/s/AKfycbxPOgrZ7jJG92Lshffrgq8sevYpL14g3xgIy31Nm8QLQPKygnUaBn4Ml9VVmdQICAfh-A/exec" },
+
+  { id: 5,  label: "Micro LIS 2023",     icon: "🌏", color: "sky",     cat: "LIS Portal",
+    desc: "Archive · 2023 cycle",
+    url: "https://script.google.com/macros/s/AKfycbzI-PbEQoreu5Asjq120NjxPzpXeAP8Kqtp1Lct6wwLT9GyLtK8Ns44nmu9JMeLfLcclA/exec" },
+
+  { id: 6,  label: "Micro LIS 2022",     icon: "🌏", color: "yellow",  cat: "LIS Portal",
+    desc: "Archive · 2022 cycle",
+    url: "https://script.google.com/macros/s/AKfycbw-xWs5qb0_Kw59Ei4Gh2AQiBSvsweYa3CS3rRSbveGbdOEfO0g5ZB0WGksK1mOzkZ-Aw/exec" },
+
+  { id: 7,  label: "Micro LIS 2021",     icon: "🌏", color: "green",   cat: "LIS Portal",
+    desc: "Archive · 2021 cycle",
+    url: "https://script.google.com/macros/s/AKfycbwdMhb9hvTrYjnIFqwYklcw2TZ8WNEhOjXozaORNbKKZtjFzdZE4uqZ5RKjdkzUjVz16w/exec" },
+
+
+
+
+
+  
+
+  { id: 8,  label: "ResearchGate",       icon: "🔗", color: "teal",    cat: "Research",
+    desc: "Publication network",                 url: "" },
+  { id: 9,  label: "ScienceDirect",      icon: "📰", color: "orange",  cat: "Research",
+    desc: "Peer-reviewed journals",              url: "" },
+  { id: 10, label: "NCBI BLAST",         icon: "🧪", color: "indigo",  cat: "Bioinformatics",
+    desc: "Sequence alignment",                  url: "" },
+  { id: 11, label: "ATCC",               icon: "🦠", color: "pink",    cat: "Culture Collections",
+    desc: "Strains & reference cultures",        url: "" },
+  { id: 12, label: "UniProt",            icon: "🔬", color: "lime",    cat: "Bioinformatics",
+    desc: "Protein sequence database",           url: "" },
+  { id: 13, label: "KEGG Pathways",      icon: "🗺️", color: "cyan",    cat: "Bioinformatics",
+    desc: "Metabolic pathway maps",              url: "" },
+  { id: 14, label: "Sigma-Aldrich",      icon: "⚗️", color: "amber",   cat: "Suppliers",
+    desc: "Reagents & consumables",              url: "" },
+  { id: 15, label: "Google Drive",       icon: "📁", color: "yellow",  cat: "Productivity",
+    desc: "Documents & shared files",            url: "" },
+  { id: 16, label: "Google Meet",        icon: "📹", color: "green",   cat: "Collaboration",
+    desc: "Video meetings",                      url: "" },
+  { id: 17, label: "Zoom",               icon: "🎥", color: "blue",    cat: "Collaboration",
+    desc: "Video conferencing",                  url: "" },
+  { id: 18, label: "Overleaf (LaTeX)",   icon: "✍️", color: "red",     cat: "Productivity",
+    desc: "Collaborative scientific writing",    url: "" },
+  { id: 19, label: "Button 19",          icon: "🔧", color: "gray",    cat: "General",
+    desc: "Not configured",                      url: "" },
+  { id: 20, label: "Button 20",          icon: "🔧", color: "gray",    cat: "General",
+    desc: "Not configured",                      url: "" },
+];
+
+/* ══════════════════════════════════════════════════════════════
+   DOM REFS
+   ══════════════════════════════════════════════════════════════ */
+const grid       = document.getElementById('grid');
+const emptyEl    = document.getElementById('empty');
+const chipsEl    = document.getElementById('chips');
+const searchEl   = document.getElementById('search');
+const connStatus = document.getElementById('conn-status');
+const statusDot  = document.getElementById('status-dot');
+const statActive = document.getElementById('stat-active');
+const statGroups = document.getElementById('stat-groups');
+const statClock  = document.getElementById('stat-clock');
+const hclockTime = document.getElementById('hclock-time');
+const hclockDate = document.getElementById('hclock-date');
+const themeBtn   = document.getElementById('theme-btn');
+const themeIcon  = document.getElementById('theme-icon');
+
+const state = { q: '', cat: 'All' };
+
+/* ══════════════════════════════════════════════════════════════
+   DATA HELPERS
+   ══════════════════════════════════════════════════════════════ */
+const activeButtons = () => BUTTONS.filter(b => (b.url || '').trim() !== '');
+const catOf = b => b.cat || 'General';
+
+function matches(b) {
+  if (state.cat !== 'All' && catOf(b) !== state.cat) return false;
+  if (!state.q) return true;
+  const hay = (b.label + ' ' + catOf(b) + ' ' + (b.desc || '')).toLowerCase();
+  return hay.includes(state.q);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RENDER — FILTER CHIPS
+   ══════════════════════════════════════════════════════════════ */
+function buildChips() {
+  const cats = ['All', ...new Set(activeButtons().map(catOf))];
+  chipsEl.innerHTML = cats
+    .map(c => `<button class="chip${c === state.cat ? ' active' : ''}" data-cat="${c}">${c}</button>`)
+    .join('');
+
+  chipsEl.querySelectorAll('.chip').forEach(el => {
+    el.addEventListener('click', () => {
+      state.cat = el.dataset.cat;
+      chipsEl.querySelectorAll('.chip').forEach(x => x.classList.toggle('active', x === el));
+      renderGrid();
+    });
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RENDER — CARD GRID
+   ══════════════════════════════════════════════════════════════ */
+function renderGrid() {
+  const items = activeButtons().filter(matches);
+
+  grid.innerHTML = '';
+
+  if (!items.length) {
+    grid.hidden = true;
+    emptyEl.classList.add('show');
+    return;
+  }
+  grid.hidden = false;
+  emptyEl.classList.remove('show');
+
+  items.forEach((b, i) => {
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'app-card';
+    card.style.animationDelay = Math.min(i * 34, 420) + 'ms';
+    card.title = b.label + ' — opens in this tab';
+
+    card.innerHTML = `
+      <span class="app-icon c-${b.color || 'gray'}">${b.icon || '🔗'}</span>
+      <span class="app-text">
+        <span class="app-label">${b.label}</span>
+        <span class="app-desc">${b.desc || catOf(b)}</span>
+      </span>
+      <svg class="app-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M7 17 17 7"/><path d="M8 7h9v9"/>
+      </svg>
+    `;
+
+    card.addEventListener('click', () => launch(b, card));
+    grid.appendChild(card);
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LAUNCH
+   ══════════════════════════════════════════════════════════════ */
+function launch(b, card) {
+  const url = (b.url || '').trim();
+  if (!url) return;
+
+  card.classList.add('launching');
+  connStatus.textContent = 'Opening…';
+  statusDot.className = 'dot busy';
+
+  setTimeout(() => { window.location.href = url; }, 190);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   STATS + STATUS
+   ══════════════════════════════════════════════════════════════ */
+function updateStats() {
+  const list = activeButtons();
+  statActive.textContent = list.length;
+  statGroups.textContent = new Set(list.map(catOf)).size;
+
+  connStatus.textContent = list.length ? 'Live' : 'Idle';
+  statusDot.className = list.length ? 'dot' : 'dot idle';
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SEARCH
+   ══════════════════════════════════════════════════════════════ */
+searchEl.addEventListener('input', e => {
+  state.q = e.target.value.trim().toLowerCase();
+  renderGrid();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement !== searchEl) {
+    e.preventDefault();
+    searchEl.focus();
+    searchEl.select();
+  } else if (e.key === 'Escape' && document.activeElement === searchEl) {
+    searchEl.value = '';
+    state.q = '';
+    renderGrid();
+    searchEl.blur();
+  }
+});
+
+/* ══════════════════════════════════════════════════════════════
+   THEME
+   ══════════════════════════════════════════════════════════════ */
+function syncThemeIcon() {
+  themeIcon.textContent = document.documentElement.classList.contains('dark') ? '☀️' : '🌙';
+}
+
+themeBtn.addEventListener('click', () => {
+  const html = document.documentElement;
+  const dark = html.classList.toggle('dark');
+  localStorage.theme = dark ? 'dark' : 'light';
+  syncThemeIcon();
+  resizeClockCanvas();
+});
+
+/* ══════════════════════════════════════════════════════════════
+   HEADER DIGITAL CLOCK
+   ══════════════════════════════════════════════════════════════ */
+function tickDigital() {
+  const now = new Date();
+  const t = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+  hclockTime.textContent = t;
+  hclockDate.textContent = now.toLocaleDateString([], { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' });
+  statClock.textContent  = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FLOATING ANALOG CLOCK
+   ══════════════════════════════════════════════════════════════ */
+const clockCanvas = document.getElementById('clock-canvas');
+const cctx = clockCanvas.getContext('2d');
+let clockSize = 100;
+
+function resizeClockCanvas() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const size = clockCanvas.clientWidth || 100;
+  clockSize = size;
+  clockCanvas.width  = Math.round(size * dpr);
+  clockCanvas.height = Math.round(size * dpr);
+  cctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+function drawClock() {
+  if (!clockSize) return;
+  const S = clockSize, c = S / 2, R = c - 2.5;
+  const dark = document.documentElement.classList.contains('dark');
+
+  cctx.clearRect(0, 0, S, S);
+
+  const now = new Date();
+  const sec = now.getSeconds() + now.getMilliseconds() / 1000;
+  const min = now.getMinutes() + sec / 60;
+  const hr  = (now.getHours() % 12) + min / 60;
+
+  /* Base ring */
+  cctx.beginPath();
+  cctx.arc(c, c, R - 2.5, 0, Math.PI * 2);
+  cctx.strokeStyle = dark ? 'rgba(148,163,184,.18)' : 'rgba(8,19,28,.08)';
+  cctx.lineWidth = 3;
+  cctx.stroke();
+
+  /* Seconds progress arc */
+  cctx.beginPath();
+  cctx.arc(c, c, R - 2.5, -Math.PI / 2, -Math.PI / 2 + (sec / 60) * Math.PI * 2);
+  cctx.strokeStyle = '#10b981';
+  cctx.lineWidth = 3;
+  cctx.lineCap = 'round';
+  cctx.stroke();
+
+  /* Minute ticks */
+  for (let i = 0; i < 60; i++) {
+    const a = (i / 60) * Math.PI * 2 - Math.PI / 2;
+    const major = i % 5 === 0;
+    const inner = major ? R - 11 : R - 7;
+    const outer = R - 4.5;
+    cctx.beginPath();
+    cctx.moveTo(c + inner * Math.cos(a), c + inner * Math.sin(a));
+    cctx.lineTo(c + outer * Math.cos(a), c + outer * Math.sin(a));
+    cctx.strokeStyle = major
+      ? (dark ? 'rgba(226,232,240,.62)' : 'rgba(8,19,28,.42)')
+      : (dark ? 'rgba(148,163,184,.22)' : 'rgba(8,19,28,.14)');
+    cctx.lineWidth = major ? 2 : 1;
+    cctx.lineCap = 'round';
+    cctx.stroke();
+  }
+
+  /* Hour hand */
+  const hA = (hr / 12) * Math.PI * 2 - Math.PI / 2;
+  const hL = R * 0.46;
+  cctx.beginPath();
+  cctx.moveTo(c - hL * 0.18 * Math.cos(hA), c - hL * 0.18 * Math.sin(hA));
+  cctx.lineTo(c + hL * Math.cos(hA), c + hL * Math.sin(hA));
+  cctx.strokeStyle = dark ? '#e2e8f0' : '#0f172a';
+  cctx.lineWidth = Math.max(3.2, R * 0.075);
+  cctx.lineCap = 'round';
+  cctx.stroke();
+
+  /* Minute hand */
+  const mA = (min / 60) * Math.PI * 2 - Math.PI / 2;
+  const mL = R * 0.68;
+  cctx.beginPath();
+  cctx.moveTo(c - mL * 0.16 * Math.cos(mA), c - mL * 0.16 * Math.sin(mA));
+  cctx.lineTo(c + mL * Math.cos(mA), c + mL * Math.sin(mA));
+  cctx.strokeStyle = dark ? '#cbd5e1' : '#334155';
+  cctx.lineWidth = Math.max(2.4, R * 0.055);
+  cctx.lineCap = 'round';
+  cctx.stroke();
+
+  /* Second hand */
+  const sA = (sec / 60) * Math.PI * 2 - Math.PI / 2;
+  const sL = R * 0.76;
+  cctx.beginPath();
+  cctx.moveTo(c - sL * 0.22 * Math.cos(sA), c - sL * 0.22 * Math.sin(sA));
+  cctx.lineTo(c + sL * Math.cos(sA), c + sL * Math.sin(sA));
+  cctx.strokeStyle = '#059669';
+  cctx.lineWidth = Math.max(1.4, R * 0.032);
+  cctx.lineCap = 'round';
+  cctx.stroke();
+
+  /* Hub */
+  cctx.beginPath();
+  cctx.arc(c, c, Math.max(3.4, R * 0.085), 0, Math.PI * 2);
+  cctx.fillStyle = dark ? '#f1f5f9' : '#0f172a';
+  cctx.fill();
+  cctx.beginPath();
+  cctx.arc(c, c, Math.max(1.6, R * 0.038), 0, Math.PI * 2);
+  cctx.fillStyle = '#059669';
+  cctx.fill();
+}
+
+function clockLoop() {
+  drawClock();
+  requestAnimationFrame(clockLoop);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FLOATING MICROBE PARTICLES
+   ══════════════════════════════════════════════════════════════ */
+const pcanvas = document.getElementById('particles');
+const pctx = pcanvas.getContext('2d');
+let pw = 0, ph = 0;
+let microbes = [];
+
+function resizeParticles() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  pw = window.innerWidth;
+  ph = window.innerHeight;
+  pcanvas.width  = Math.round(pw * dpr);
+  pcanvas.height = Math.round(ph * dpr);
+  pcanvas.style.width  = pw + 'px';
+  pcanvas.style.height = ph + 'px';
+  pctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+function makeMicrobes() {
+  const count = window.innerWidth < 700 ? 16 : 30;
+  microbes = Array.from({ length: count }, () => spawn(true));
+}
+
+function spawn(anywhere) {
+  const rod = Math.random() > 0.35;
+  return {
+    rod,
+    x: anywhere ? Math.random() * pw : (Math.random() < .5 ? -60 : pw + 60),
+    y: Math.random() * ph,
+    r: rod ? 1.6 + Math.random() * 2.4 : 2.2 + Math.random() * 3.4,
+    len: 9 + Math.random() * 20,
+    a: Math.random() * Math.PI * 2,
+    va: (Math.random() - 0.5) * 0.006,
+    vx: (Math.random() - 0.5) * 0.22,
+    vy: (Math.random() - 0.5) * 0.22,
+    alpha: 0.06 + Math.random() * 0.13
+  };
+}
+
+function drawMicrobes() {
+  if (!pw) return;
+  pctx.clearRect(0, 0, pw, ph);
+  const dark = document.documentElement.classList.contains('dark');
+  const rgb = dark ? '52,211,153' : '5,150,105';
+  const rgb2 = dark ? '56,189,248' : '2,132,199';
+
+  for (const m of microbes) {
+    m.x += m.vx;
+    m.y += m.vy;
+    m.a += m.va;
+
+    if (m.x < -80) m.x = pw + 80;
+    if (m.x > pw + 80) m.x = -80;
+    if (m.y < -80) m.y = ph + 80;
+    if (m.y > ph + 80) m.y = -80;
+
+    pctx.save();
+    pctx.translate(m.x, m.y);
+    pctx.rotate(m.a);
+    pctx.lineCap = 'round';
+
+    if (m.rod) {
+      pctx.strokeStyle = `rgba(${rgb},${m.alpha})`;
+      pctx.lineWidth = m.r * 2;
+      pctx.beginPath();
+      pctx.moveTo(-m.len / 2, 0);
+      pctx.lineTo(m.len / 2, 0);
+      pctx.stroke();
+
+      /* flagellum */
+      pctx.strokeStyle = `rgba(${rgb2},${m.alpha * 0.7})`;
+      pctx.lineWidth = Math.max(0.6, m.r * 0.5);
+      pctx.beginPath();
+      pctx.moveTo(m.len / 2, 0);
+      pctx.quadraticCurveTo(m.len / 2 + 7, -5, m.len / 2 + 13, 3);
+      pctx.stroke();
+    } else {
+      pctx.fillStyle = `rgba(${rgb2},${m.alpha})`;
+      pctx.beginPath();
+      pctx.arc(0, 0, m.r, 0, Math.PI * 2);
+      pctx.fill();
+    }
+    pctx.restore();
+  }
+}
+
+let particleLast = 0;
+function particleLoop(t) {
+  requestAnimationFrame(particleLoop);
+  if (t - particleLast < 34) return;   /* ~30 fps, easy on the battery */
+  particleLast = t;
+  drawMicrobes();
+}
+
+/* ══════════════════════════════════════════════════════════════
+   INIT
+   ══════════════════════════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', () => {
+  syncThemeIcon();
+  updateStats();
+  buildChips();
+  renderGrid();
+
+  resizeClockCanvas();
+  requestAnimationFrame(clockLoop);
+
+  resizeParticles();
+  makeMicrobes();
+  requestAnimationFrame(particleLoop);
+
+  tickDigital();
+  setInterval(tickDigital, 1000);
+
+  /* Keep canvases crisp on resize */
+  let rz;
+  window.addEventListener('resize', () => {
+    clearTimeout(rz);
+    rz = setTimeout(() => {
+      resizeClockCanvas();
+      resizeParticles();
+      makeMicrobes();
+    }, 160);
+  });
+});
+</script>
+
+</body>
+</html>
